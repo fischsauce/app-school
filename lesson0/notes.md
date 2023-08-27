@@ -102,3 +102,62 @@ dojo: app poke failed
 ### instead of defining every arm - we can use defaults:
 `++  on-save  on-save:default`
 
+### there's two ways to build a desk - for alfa we used `|new-desk %desk-name`. this time we'll copy an existing desk with:
+`|merge %bravo our %base`
+
+### now we mount it:
+`|mount %bravo`
+
+### we then need to manually copy our bravo.hoon file into /zod/bravo/app/
+
+### also edit the desk.bill to contain only bravo:
+```
+:~ %bravo
+==
+```
+
+### commit those changes:
+```
+> |commit %bravo
+>=
+: /~zod/bravo/2/desk/bill
++ /~zod/bravo/2/app/bravo/hoon
+```
+
+
+### ...and install:
+```
+> |install our %bravo
+gall: installing %bravo
+>   '%bravo initialized successfully'
+> |install our %bravo
+>=
+gall: booted %bravo
+```
+
+
+### now let's poke it:
+```
+> :bravo &noun ~
+/sys/vane/gall/hoon:<[1.378 9].[1.378 37]>
+/lib/default-agent/hoon:<[19 3].[20 5]>
+"unexpected poke to %bravo with mark %noun"
+/lib/default-agent/hoon:<[20 3].[20 5]>
+dojo: app poke failed
+```
+
+#### this time, instead of just crashing, we get a message "unexpected..." this is 'default-agent.hoon' which is providing us more info in ++ on-poke:
+```
+++  on-poke
+  |=  =cage
+  ~|  "unexpected poke to {<dap.bowl>} with mark {<p.cage>}"
+  !!
+```
+
+### we can do +dbug to get our current state:
+```
+:bravo +dbug
+>=
+```
+
+#### which returns nothing, because our default values are all null 
